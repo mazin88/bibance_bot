@@ -10,9 +10,11 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 env_file = os.path.join(HERE, ".env")
 if os.path.exists(env_file):
     for line in open(env_file):
-        if "=" in line and not line.lstrip().startswith("#"):
-            k, v = line.strip().split("=", 1)
-            os.environ.setdefault(k.strip(), v.strip())
+        line = line.split("#", 1)[0].strip()          # drop comments, incl. inline "# ..." notes
+        if "=" in line:
+            k, v = line.split("=", 1)
+            if k.strip() and v.strip():
+                os.environ.setdefault(k.strip(), v.strip())
 E = os.environ.get
 MODE = E("MODE", "paper")
 SYMBOLS = E("SYMBOLS", "HBARUSDT,1000PEPEUSDT,INJUSDT,SOLUSDT,XLMUSDT,WLDUSDT,WIFUSDT,XRPUSDT,NEARUSDT,FETUSDT").split(",")
